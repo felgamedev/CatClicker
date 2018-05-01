@@ -1,0 +1,25 @@
+body {
+  text-align: center;
+  font-family: sans-serif;
+  font-size: 32px;
+}
+
+.cats {
+  display: inline-flex;
+  width: 960px;
+  height: 800px;
+  align-items: center;
+}
+
+.cat-img {
+  max-height: 500px;
+  max-width: 500px;
+  width: auto;
+
+}
+
+ul {
+  text-align: right;
+  list-style-type: none;
+  margin-right: 32px;
+}
