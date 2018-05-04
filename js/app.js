@@ -93,17 +93,50 @@ var adminPanelView = {
     this.cancel = document.querySelector("#admin-cancel-button");
     this.submit = document.querySelector("#admin-submit-button");
 
-    this.form.style.display = (octopus.getAdminHidden()) ? "none" : "block";
+    this.form.style.display = octopus.getAdminHidden() ? "none" : "grid";
 
-    this.toggle.addEventListener("click", (function(form) {
-      return function() {
-        let hideAdmin = octopus.toggleAdminVisibility();
-      };
-    })(this.form));
+    this.toggle.addEventListener("click", (function(nameField, urlField, counterField) {
+        return function(event) {
+          octopus.toggleAdminVisibility();
+          if (!octopus.getAdminHidden()) {
+            let cat = octopus.getCurrentCat();
+            nameField.value = cat.name;
+            urlField.value = cat.imgPath;
+            counterField.value = cat.clickCounter;
+          }
+        };
+      })(this.nameField, this.urlField, this.counterField)
+    );
+
+    this.cancel.addEventListener("click", (function(nameField, urlField, counterField) {
+        return function(event) {
+          event.preventDefault();
+          nameField.value = "";
+          urlField.value = "";
+          counterField.value = "";
+          octopus.toggleAdminVisibility();
+        };
+      })(this.nameField, this.urlField, this.counterField)
+    );
+
+    this.submit.addEventListener("click", (function(nameField, urlField, counterField) {
+        return function(event) {
+          event.preventDefault();
+          let newCatInfo = {
+            name: nameField.value,
+            imgPath: urlField.value,
+            clickCounter: Number(counterField.value)
+          }
+          octopus.updateCat(newCatInfo);
+          octopus.toggleAdminVisibility();
+        };
+      })(this.nameField, this.urlField, this.counterField)
+    );
   },
 
-  render: function(){
-    this.form.style.display = (octopus.getAdminHidden()) ? "none" : "block";
+  render: function() {
+    this.form.style.display = octopus.getAdminHidden() ? "none" : "grid";
+
   }
 };
 
@@ -126,6 +159,7 @@ var octopus = {
 
   loadCat: function(index) {
     model.currentCat = model.cats[index];
+    if(!model.adminPanelHidden) this.toggleAdminVisibility();
     panelView.render();
   },
 
@@ -141,6 +175,15 @@ var octopus = {
 
   getAdminHidden: function() {
     return model.adminPanelHidden;
+  },
+
+  updateCat: function(newCat){
+    let current = model.currentCat;
+    current.name = newCat.name;
+    current.imgPath = newCat.imgPath;
+    current.clickCounter = newCat.clickCounter;
+    listView.render();
+    panelView.render();
   }
 };
 
