@@ -7,7 +7,7 @@ body {
 .cats {
   display: inline-flex;
   width: 960px;
-  height: 800px;
+  height: auto;
   align-items: center;
 }
 
@@ -22,4 +22,14 @@ ul {
   text-align: right;
   list-style-type: none;
   margin-right: 32px;
+}
+
+form {
+  display: grid;
+  text-align: left;
+}
+
+button {
+  display: block;
+  max-width: fit-content;
 }
